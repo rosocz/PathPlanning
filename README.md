@@ -1,5 +1,36 @@
 # CarND-Path-Planning-Project
 Self-Driving Car Engineer Nanodegree Program
+
+###Model Documentation
+Path is counted based on 5 points. 2 point are taken from history and 3 points are counted based on known waypoints and map.
+Because we know x,y coordinates of our waypoints, we convert them to Frenet coordinates and transform to car's direction. 
+Now we can easily get cars position in s equal to 30, 60 and 90 meters from current car's position. We take point 30 meters from current position 
+and count as many points on spline curve as required. More points means lower velocity.   
+
+These 5 points are used to get spline curve. Having spline curve allows us to create as many points as we need and start control car's speed. 
+We just need to transform counted point back to x,y coordinates and add to car's path.
+
+**Blocking car detection**
+
+We have data from sensors about other cars. If we detect car with same d and too low s (30 meters in our case), it's a moment for changing the lane. 
+If lane change is not safe, car needs to slow down to the speed of the blocking car. Slow down rate is taken from current speed and 
+distance to the blocking car. 
+ 
+**Changing lane**
+
+With setup we already have is lane change very easy. We predict path by spline curve with points in Frenet coordinates, changing lane means just 
+change of value d. We take 2 points from previous path and 3 new points are counted in new lane. Spline curve smoothly joins 
+these points. To keep lane change safe we use sensor data to observe cars around and if there is car in distance of 20 meters, 
+lane change is considered as not safe. Velocity is decreased to 45 before the lane is changed because it causes too big yaw.  
+
+**Lane selection**
+
+When car is in the center lane, there are 2 options for change. I implemented very simple optimization based on distance to the next car in the new lane. 
+Larger is better, so in case both lanes are available, lane with car far from our car is preferred. There is place for more 
+criteria like other car's velocity etc. For this special case could be used something like A* algorithm to find path through 
+group of cars.    
+
+ 
    
 ### Simulator.
 You can download the Term3 Simulator which contains the Path Planning Project from the [releases tab (https://github.com/udacity/self-driving-car-sim/releases/tag/T3_v1.2).
