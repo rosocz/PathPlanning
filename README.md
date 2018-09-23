@@ -1,7 +1,7 @@
 # CarND-Path-Planning-Project
 Self-Driving Car Engineer Nanodegree Program
 
-###Model Documentation
+### Model Documentation
 Path is counted based on 5 points. 2 point are taken from history and 3 points are counted based on known waypoints and map.
 Because we know x,y coordinates of our waypoints, we convert them to Frenet coordinates and transform to car's direction. 
 Now we can easily get cars position in s equal to 30, 60 and 90 meters from current car's position. We take point 30 meters from current position 
